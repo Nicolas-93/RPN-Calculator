@@ -5,9 +5,9 @@ INC_DIR=include
 INCLUDE=-I$(INC_DIR)
 LIBS=-lm
 CFLAGS=-fdiagnostics-color=always -Wall -pedantic -std=c17 -g -O0
-TP_N=1
-NOM_ZIP=TP$(TP_N)_SEBAN.zip
-EXEC=NomProg
+TP_N=3
+NOM_ZIP=TP$(TP_N)_SEBAN_Nicolas.zip
+EXEC=rpn
 CONTENU_ZIP=$(SRC_DIR) $(INC_DIR) .clang-format .clang-tidy Makefile rapport.pdf
 
 SOURCES=$(wildcard $(SRC_DIR)/*.c)
@@ -25,8 +25,11 @@ $(BUILD_DIR)/$(EXEC): $(OBJS)
 	$(CC) $^ -o $@ $(LIBS)
 
 # Dépendances
-Main.o: Main.c B.h C.h D.h
-B.o: B.c C.h
+token.o: token.c operations.h
+stack.o: stack.c token.h
+parser.o: parser.c stack.h
+operations.o: operations.c
+utils.o: utils.c
 
 # Création des fichiers objets à partir des fichiers sources
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
