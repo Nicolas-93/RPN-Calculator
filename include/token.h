@@ -23,6 +23,12 @@ typedef struct Token {
     } token;
 } Token;
 
+#define SEPARATORS " \n"
+#define FOREACH_TOKEN_SAFE(token, line, saveptr) \
+    for (token = strtok_r((line), SEPARATORS, (saveptr)); \
+         token;                                                                   \
+         token = strtok_r((NULL), SEPARATORS, (saveptr)))
+
 /**
  * @brief Parse a string to a new Token object
  * 

@@ -27,8 +27,7 @@ TokenError Token_parse(char* token, Token* dest) {
 }
 
 TokenError Token_print_token(Token token) {
-    switch (token.type)
-    {
+    switch (token.type) {
     case NUMBER:
         printf("%d", token.token.number);
         break;
@@ -40,11 +39,7 @@ TokenError Token_print_token(Token token) {
     case OPERATOR:
         printf("%s", token.token.op.symbol);
         break;
-    
-    default:
-        printf("<WTF>");
-        return TOKEN_ERR_INVALID;
     }
-
-    return TOKEN_ERR_NONE;
+    printf("<WTF>");
+    return TOKEN_ERR_INVALID;
 }
