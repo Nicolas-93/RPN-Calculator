@@ -21,7 +21,7 @@ typedef struct TokenStack {
  * @param new TokenStack object
  * @return int 
  */
-int Stack_init(TokenStack* new)
+int Stack_init(TokenStack* new);
 
 /**
  * @brief Push a token into the stack
@@ -68,8 +68,7 @@ int Stack_clear(TokenStack* stack);
  * @brief Print stack_content
  * 
  * @param stack TokenStack object
- * @return int 
  */
-int Stack_print(const TokenStack* stack);
+void Stack_print(const TokenStack* stack);
 
 #endif

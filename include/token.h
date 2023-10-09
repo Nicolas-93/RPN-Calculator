@@ -1,7 +1,9 @@
 #ifndef TOKEN_H
 #define TOKEN_H
+#define _GNU_SOURCE
 
 #include "operations.h"
+#include <string.h>
 
 typedef enum TokenError {
     TOKEN_ERR_NONE,
@@ -25,9 +27,9 @@ typedef struct Token {
 
 #define SEPARATORS " \n"
 #define FOREACH_TOKEN_SAFE(token, line, saveptr) \
-    for (token = strtok_r((line), SEPARATORS, (saveptr)); \
-         token;                                                                   \
-         token = strtok_r((NULL), SEPARATORS, (saveptr)))
+    for(token = strtok_r((line), SEPARATORS, (saveptr)); \
+        token;                                           \
+        token = strtok_r((NULL), SEPARATORS, (saveptr)))
 
 /**
  * @brief Parse a string to a new Token object
@@ -38,6 +40,12 @@ typedef struct Token {
  */
 TokenError Token_parse(char* token, Token* dest);
 
+/**
+ * @brief Print token to stdout
+ * 
+ * @param token Token object
+ * @return TokenError 
+ */
 TokenError Token_print_token(Token token);
 
 #endif

@@ -2,12 +2,12 @@
 #include "operations.h"
 #include "utils.h"
 #include <stdlib.h>
+#include <stdio.h>
+#include <assert.h>
 
 TokenError Token_parse(char* token, Token* dest) {
     // if (false || (true && !!!false ^ true));
-    if (!token) {
-        return -1;
-    }
+    assert(token);
 
     if (is_operator(token, &dest->token.op)) {
         dest->type = OPERATOR;
@@ -39,7 +39,12 @@ TokenError Token_print_token(Token token) {
     case OPERATOR:
         printf("%s", token.token.op.symbol);
         break;
+    default:
+        printf("<WTF>");
+        fflush(stdout);
+        return TOKEN_ERR_INVALID;
     }
-    printf("<WTF>");
-    return TOKEN_ERR_INVALID;
+    fflush(stdout);
+
+    return TOKEN_ERR_NONE;
 }
