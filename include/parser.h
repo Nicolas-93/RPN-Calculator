@@ -9,11 +9,7 @@ typedef enum ParserError {
     PARSE_ERR_NO_OPERATOR,
 } ParserError;
 
-char* PARSE_ERROR_MSG[] = {
-    "",
-    "Token non reconnu",
-    "Opérateur ou fonction attendu",
-};
+extern char* PARSE_ERROR_MSG[];
 
 /**
  * @brief Evaluates stack
@@ -21,7 +17,7 @@ char* PARSE_ERROR_MSG[] = {
  * @param stack 
  * @return int 
  */
-ParserError Parser_evaluate(const TokenStack* stack);
+ParserError Parser_evaluate(TokenStack* stack);
 
 /**
  * @brief Tokenize and evaluates user input

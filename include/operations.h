@@ -50,13 +50,6 @@ int OP_factorial(int a);
 
 bool is_operator(char* s, Operator* op);
 
-Operator OPERATORS[] = {
-    {UNARY_OPERATOR, FACTORIAL, "!", OP_factorial},
-    {BINARY_OPERATOR, EXPONENT, "^", OP_exp},
-    {BINARY_OPERATOR, ADD, "+", OP_add},
-    {BINARY_OPERATOR, SUB, "-", OP_sub},
-    {BINARY_OPERATOR, DIV, "/", OP_div},
-    {BINARY_OPERATOR, MOD, "%", OP_mod},
-};
+extern Operator OPERATORS[];
 
 #endif

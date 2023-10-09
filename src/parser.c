@@ -2,7 +2,13 @@
 #include <assert.h>
 #include <string.h>
 
-ParserError Parser_evaluate(const TokenStack* stack) {
+char* PARSE_ERROR_MSG[] = {
+    "",
+    "Token non reconnu",
+    "Opérateur ou fonction attendu",
+};
+
+ParserError Parser_evaluate(TokenStack* stack) {
     // NUMBER + UNARY_OP minimum
     assert(stack->size >= 2);
 
@@ -44,20 +50,22 @@ ParserError Parser_evaluate(const TokenStack* stack) {
     else if (t1.type == NUMBER) {
         return -PARSE_ERR_NO_OPERATOR;
     }
+
+    return PARSE_ERR_NONE;
 }
 
 ParserError Parser_tokenize(TokenStack* dest, char* user) {
     char* token_str;
     char* strtok_save_pointer;
 
-    FOREACH_TOKEN_SAFE(user, token_str, &strtok_save_pointer) {
+    FOREACH_TOKEN_SAFE(token_str, user, &strtok_save_pointer) {
         Token token;
-        Token_parse(token, &token);
-        if (token.type == NUMBER) {
-            Stack_push_token(dest, token);
-        }
-        else {
-            Parser_evaluate(stack);
+        Token_parse(token_str, &token);
+        Stack_push_token(dest, token);
+        Stack_print(dest);
+        
+        if (token.type == OPERATOR) {
+            Parser_evaluate(dest);
         }
     }
 
