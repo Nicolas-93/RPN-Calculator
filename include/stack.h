@@ -7,9 +7,13 @@
 typedef struct TokenStackEntry {
     Token token;
     STAILQ_ENTRY(TokenStackEntry) entries;
-};
+} TokenStackEntry;
 
-typedef STAILQ_HEAD(TokenStack, TokenStackEntry) TokenStack;
+typedef struct TokenStack {
+    struct TokenStackEntry *stqh_first;
+    struct TokenStackEntry **stqh_last;
+    int size;
+} TokenStack;
 
 /**
  * @brief Push a token into the stack
@@ -26,7 +30,15 @@ int Stack_push_token(TokenStack* stack, Token token);
  * @param stack TokenStack object
  * @return Token 
  */
-Token Stack_get_head_token(TokenStack stack);
+Token Stack_get_head_token(const TokenStack* stack);
+
+/**
+ * @brief Pop out the stack's token
+ * 
+ * @param stack TokenStack object
+ * @return Token 
+ */
+Token Stack_pop_head_token(TokenStack* stack);
 
 /**
  * @brief Swaps the top's token of the stack
@@ -50,6 +62,6 @@ int Stack_clear(TokenStack* stack);
  * @param stack TokenStack object
  * @return int 
  */
-int Stack_print(TokenStack stack);
+int Stack_print(const TokenStack* stack);
 
 #endif
