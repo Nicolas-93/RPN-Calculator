@@ -2,6 +2,14 @@
 #include <stdlib.h>
 #include <assert.h>
 
+
+int Stack_init(TokenStack* new) {
+    *new = (TokenStack) {
+        .size = 0,
+    };
+    STAILQ_INIT(new);
+}
+
 int Stack_push_token(TokenStack* stack, Token token) {
     TokenStackEntry* entry = malloc(sizeof(TokenStackEntry));
 
@@ -9,6 +17,7 @@ int Stack_push_token(TokenStack* stack, Token token) {
         return ERR_ALLOC;
 
     STAILQ_INSERT_HEAD(stack, entry, entries);
+    stack->size++;
 }
 
 Token Stack_get_head_token(const TokenStack* stack) {
@@ -19,6 +28,7 @@ Token Stack_pop_head_token(TokenStack* stack) {
     TokenStackEntry* entry = STAILQ_FIRST(stack);
     Token token = entry->token;
     free(entry);
+    stack->size--;
     return token;
 }
 
@@ -40,6 +50,7 @@ int Stack_clear(TokenStack* stack) {
     while (entry) {
         next = STAILQ_NEXT(entry, entries);
         STAILQ_REMOVE(stack, entry, TokenStackEntry, entries);
+        stack->size--;
         free(entry);
         entry = next;
     }

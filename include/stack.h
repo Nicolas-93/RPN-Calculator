@@ -16,6 +16,14 @@ typedef struct TokenStack {
 } TokenStack;
 
 /**
+ * @brief Initialize a stack
+ * 
+ * @param new TokenStack object
+ * @return int 
+ */
+int Stack_init(TokenStack* new)
+
+/**
  * @brief Push a token into the stack
  * 
  * @param stack TokenStack object
