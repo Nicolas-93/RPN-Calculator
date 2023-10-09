@@ -1,50 +1,39 @@
 #ifndef OPERATIONS_H
 #define OPERATIONS_H
 
+#include "utils.h"
+
 typedef enum OperatorType {
     UNARY_OPERATOR = 1,
     BINARY_OPERATOR,
 } OperatorType;
 
-
 typedef enum BinaryOperator {
-    UNKNOWN_OP,
-    ADD,
+    ADD = 1,
     SUB,
     DIV,
     MOD,
-} BinaryOperator;
-
-char BINARY_OPERATOR_CHAR[] = {
-    '\0',
-    '+',
-    '-',
-    '/',
-    '%',
-};
-
-typedef enum UnaryOperator {
-    UNKNOWN_OP,
     FACTORIAL,
     EXPONENT,
-} UnaryOperator;
+} OperatorName;
 
-char UNARY_OPERATOR_CHAR[] = {
-    '\0',
-    '!',
-    '^',
-};
 
 typedef struct Operator {
     OperatorType type;
-    union {
-        UnaryOperator unary;
-        BinaryOperator binary;
-    };
+    OperatorName name;
+    char* symbol;
 } Operator;
 
-typedef int (*UnaryFunction)(int);
+Operator OPERATORS[] = {
+    {UNARY_OPERATOR, FACTORIAL, "!"},
+    {UNARY_OPERATOR, EXPONENT, "^"},
+    {BINARY_OPERATOR, ADD, "+"},
+    {BINARY_OPERATOR, SUB, "-"},
+    {BINARY_OPERATOR, DIV, "\\"},
+    {BINARY_OPERATOR, MOD, "%"},
+};
 
+typedef int (*UnaryFunction)(int);
 typedef int (*BinaryFunction)(int, int);
 
 int OP_add(int a, int b);
@@ -60,5 +49,7 @@ int OP_mod(int a, int b);
 int OP_exp(int a);
 
 int OP_factorial(int a);
+
+bool is_operator(char* s, Operator* op);
 
 #endif

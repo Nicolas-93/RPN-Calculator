@@ -5,6 +5,7 @@
 
 typedef enum TokenError {
     TOKEN_ERR_NONE,
+    TOKEN_ERR_INVALID
 } TokenError;
 
 typedef enum TokenType {
@@ -20,7 +21,7 @@ typedef struct Token {
         int number;
         char* str;
     } token;
-};
+} Token;
 
 /**
  * @brief Parse a string to a new Token object
