@@ -77,7 +77,6 @@ void Stack_print_aux(const TokenStackEntry* entry) {
 }
 
 void Stack_print(const TokenStack* stack) {
-    printf("\n");
     Stack_print_aux(STAILQ_FIRST(stack));
     printf("\n");
 }

@@ -28,7 +28,7 @@ $(BUILD_DIR)/$(EXEC): $(OBJS)
 token.o: token.c operations.h
 stack.o: stack.c token.h
 parser.o: parser.c stack.h
-operations.o: operations.c
+operations.o: operations.c utils.h
 utils.o: utils.c
 
 # Création des fichiers objets à partir des fichiers sources
