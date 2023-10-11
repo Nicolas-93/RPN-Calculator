@@ -27,9 +27,10 @@ $(BUILD_DIR)/$(EXEC): $(OBJS)
 # Dépendances
 token.o: token.c operations.h
 stack.o: stack.c token.h
-parser.o: parser.c stack.h
+parser.o: parser.c stack.h vector.h
 operations.o: operations.c utils.h
 utils.o: utils.c
+vector.o: vector.c
 
 # Création des fichiers objets à partir des fichiers sources
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c

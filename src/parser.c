@@ -1,6 +1,7 @@
 #include "parser.h"
 #include <assert.h>
 #include <string.h>
+#include <stdio.h>
 
 char* PARSE_ERROR_MSG[] = {
     "",
@@ -10,7 +11,7 @@ char* PARSE_ERROR_MSG[] = {
 
 ParserError Parser_evaluate(TokenStack* stack) {
     // NUMBER + UNARY_OP minimum
-    assert(stack->size >= 2);
+    assert(Vector_get_length(&stack->vec) >= 2);
 
     Token t1 = Stack_pop_head_token(stack);
 
@@ -59,6 +60,11 @@ ParserError Parser_tokenize(TokenStack* dest, char* user) {
     char* strtok_save_pointer;
 
     FOREACH_TOKEN_SAFE(token_str, user, &strtok_save_pointer) {
+        VECTOR_DECLARE_ARRAY(dest->vec, Token, tokens);
+
+        //int arrSize = dest->vec.len;
+        //Token
+
         Token token;
         Token_parse(token_str, &token);
         Stack_push_token(dest, token);

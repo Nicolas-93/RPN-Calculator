@@ -1,18 +1,12 @@
 #ifndef STACK_H
 #define STACK_H
 
-#include <sys/queue.h>
+//#include <sys/queue.h>
 #include "token.h"
-
-typedef struct TokenStackEntry {
-    Token token;
-    STAILQ_ENTRY(TokenStackEntry) entries;
-} TokenStackEntry;
+#include "vector.h"
 
 typedef struct TokenStack {
-    struct TokenStackEntry *stqh_first;
-    struct TokenStackEntry **stqh_last;
-    int size;
+    Vector vec;
 } TokenStack;
 
 /**
@@ -70,5 +64,13 @@ int Stack_clear(TokenStack* stack);
  * @param stack TokenStack object
  */
 void Stack_print(const TokenStack* stack);
+
+/**
+ * @brief Get stack's length
+ * 
+ * @param self 
+ * @return size_t 
+ */
+size_t Vector_get_length(const Vector* self);
 
 #endif
