@@ -39,10 +39,14 @@ int Stack_swap_head_token(TokenStack* stack) {
     return ERR_NONE;
 }
 
-int Stack_clear(TokenStack* stack) {
+int Stack_free(TokenStack* stack) {
     Vector_free(&stack->vec);
 
     return ERR_NONE;
+}
+
+int Stack_clear(TokenStack* stack) {
+    Vector_clear(&stack->vec);
 }
 
 void Stack_print(const TokenStack* stack) {

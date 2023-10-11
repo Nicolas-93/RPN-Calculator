@@ -76,11 +76,13 @@ void* Vector_pop(Vector* self) {
     return popped;
 }
 
-VectorError Vector_free(Vector* self) {
+void Vector_free(Vector* self) {
     free(self->arr);
     *self = (Vector) {0};
+}
 
-    return VECTOR_ERR_NONE;
+void Vector_clear(Vector* self) {
+    self->len = 0;
 }
 
 size_t Vector_get_length(const Vector* self) {

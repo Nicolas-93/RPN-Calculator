@@ -82,9 +82,15 @@ void* Vector_pop(Vector* self);
  * @brief Free Vector object
  * 
  * @param self 
- * @return VectorError 
  */
-VectorError Vector_free(Vector* self);
+void Vector_free(Vector* self);
+
+/**
+ * @brief Clear Vector object
+ * 
+ * @param self 
+ */
+void Vector_clear(Vector* self);
 
 /**
  * @brief Get Vector's length
