@@ -71,7 +71,7 @@ void* Vector_pop(Vector* self) {
     if (self->len == 0)
         return NULL;
 
-    uint8_t* popped = self->arr + (--self->len) * self->element_size;
+    uint8_t* popped = self->arr + (--(self->len)) * self->element_size;
 
     return popped;
 }

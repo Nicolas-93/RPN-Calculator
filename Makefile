@@ -3,7 +3,7 @@ BUILD_DIR=build
 SRC_DIR=src
 INC_DIR=include
 INCLUDE=-I$(INC_DIR)
-LIBS=-lm
+LIBS=-lm -lreadline
 CFLAGS=-fdiagnostics-color=always -Wall -pedantic -std=c17 -g -O0
 TP_N=3
 NOM_ZIP=TP$(TP_N)_SEBAN_Nicolas.zip
@@ -31,6 +31,7 @@ parser.o: parser.c stack.h vector.h
 operations.o: operations.c utils.h
 utils.o: utils.c
 vector.o: vector.c
+interpretor.o: interpretor.c parser.h utils.h
 
 # Création des fichiers objets à partir des fichiers sources
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c

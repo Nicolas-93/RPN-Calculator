@@ -54,9 +54,8 @@ int Stack_swap_head_token(TokenStack* stack);
  * @brief Clear stack
  * 
  * @param stack Adresss of TokenStack object
- * @return int 
  */
-int Stack_clear(TokenStack* stack);
+void Stack_clear(TokenStack* stack);
 
 /**
  * @brief Frees stack

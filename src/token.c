@@ -3,6 +3,7 @@
 #include "utils.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <assert.h>
 
 TokenError Token_parse(char* token, Token* dest) {

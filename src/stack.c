@@ -45,7 +45,7 @@ int Stack_free(TokenStack* stack) {
     return ERR_NONE;
 }
 
-int Stack_clear(TokenStack* stack) {
+void Stack_clear(TokenStack* stack) {
     Vector_clear(&stack->vec);
 }
 
