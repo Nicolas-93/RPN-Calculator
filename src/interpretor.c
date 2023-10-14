@@ -10,7 +10,13 @@ TokenStack STACK;
 bool QUIT = false;
 
 void print_stack(void)          { Stack_print(&STACK); }
-void print_stack_head(void)     { printf("%d\n", Stack_get_head_token(&STACK).token.number); }
+void print_stack_head(void)     {
+    if (Stack_get_length(&STACK) <= 0) {
+        printf("stack empty\n");
+        return;
+    }
+    printf("%d\n", Stack_get_head_token(&STACK).token.number);
+}
 void clear_stack(void)          { Stack_clear(&STACK); }
 void reverse_stack_head(void)   { Stack_swap_head_token(&STACK); }
 void quit(void)                 { QUIT = true; }
