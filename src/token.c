@@ -14,7 +14,7 @@ TokenError Token_parse(char* token, Token* dest) {
         dest->type = OPERATOR;
     }
 
-    else if (is_integer(token)) {
+    else if (is_integer(token, false)) {
         dest->type = NUMBER;
         dest->token.number = atoi(token);
     }

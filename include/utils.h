@@ -10,6 +10,6 @@ typedef enum Error {
     ERR_ALLOC,
 } Error;
 
-bool is_integer(char* s);
+bool is_integer(char* s, bool minus);
 
 #endif
