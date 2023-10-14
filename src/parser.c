@@ -10,7 +10,11 @@ char* PARSE_ERROR_MSG[] = {
     "Manque de nombres pour réaliser l'opération",
 };
 
-ParserError Parser_evaluate(TokenStack* stack) {
+char* Parser_get_error(ParserError err) {
+    return PARSE_ERROR_MSG[-err];
+}
+
+ParserError Parser_evaluate(TokenStack* stack, OperationError* operr) {
 
     assert(Stack_get_length(stack) > 0);
 
@@ -33,21 +37,27 @@ ParserError Parser_evaluate(TokenStack* stack) {
             return PARSE_ERR_MISSING_NUMBER;
         }
 
+        *operr = OP_ERR_NONE;
         int res = 0;
 
         Token t2 = Stack_pop_head_token(stack);
 
         if (op.type == UNARY_OPERATOR) {
-            res = op.func.unary(t2.token.number);
+            *operr = op.func.unary(t2.token.number, &res);
         }
 
         else if (op.type == BINARY_OPERATOR) {
             Token t3 = Stack_pop_head_token(stack);
 
-            res = op.func.binary(
+            *operr = op.func.binary(
                 t3.token.number,
-                t2.token.number
+                t2.token.number,
+                &res
             );
+        }
+
+        if (*operr < 0) {
+            return PARSE_ERR_OPERATION;
         }
 
         Stack_push_token(
@@ -66,7 +76,7 @@ ParserError Parser_evaluate(TokenStack* stack) {
     return PARSE_ERR_NONE;
 }
 
-ParserError Parser_tokenize(TokenStack* dest, char* user) {
+ParserError Parser_tokenize(TokenStack* dest, char* user, OperationError* operr) {
     char* token_str;
     char* strtok_save_pointer;
     ParserError err = PARSE_ERR_NONE;
@@ -79,7 +89,7 @@ ParserError Parser_tokenize(TokenStack* dest, char* user) {
         Stack_print(dest);
 
         if (token.type == OPERATOR || token.type == STRING) {
-            if ((err = Parser_evaluate(dest)) < 0) {
+            if ((err = Parser_evaluate(dest, operr)) < 0) {
                 return err;
             }
         }

@@ -8,6 +8,7 @@ typedef enum ParserError {
     PARSE_ERR_UNRECOGNIZED_TOKEN = -1,
     PARSE_ERR_NO_OPERATOR = -2,
     PARSE_ERR_MISSING_NUMBER = -3,
+    PARSE_ERR_OPERATION = -4
 } ParserError;
 
 extern char* PARSE_ERROR_MSG[];
@@ -18,7 +19,7 @@ extern char* PARSE_ERROR_MSG[];
  * @param stack 
  * @return int 
  */
-ParserError Parser_evaluate(TokenStack* stack);
+ParserError Parser_evaluate(TokenStack* stack, OperationError* operr);
 
 /**
  * @brief Tokenize and evaluates user input
@@ -26,6 +27,8 @@ ParserError Parser_evaluate(TokenStack* stack);
  * @param dest 
  * @param user 
  */
-ParserError Parser_tokenize(TokenStack* dest, char* user);
+ParserError Parser_tokenize(TokenStack* dest, char* user, OperationError* operr);
+
+char* Parser_get_error(ParserError err);
 
 #endif

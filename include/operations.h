@@ -17,8 +17,16 @@ typedef enum BinaryOperator {
     EXPONENT,
 } OperatorName;
 
-typedef int (*UnaryFunction)(int);
-typedef int (*BinaryFunction)(int, int);
+typedef enum OperationError {
+    OP_ERR_NONE = 0,
+    OP_ERR_DIV_ZERO = -1,
+    OP_ERR_FACT_NEGATIVE = -2,
+} OperationError;
+
+extern char* OP_ERR_MSG[];
+
+typedef OperationError (*UnaryFunction)(int, int*);
+typedef OperationError (*BinaryFunction)(int, int, int*);
 
 typedef struct Operator {
     OperatorType type;
@@ -27,26 +35,27 @@ typedef struct Operator {
     union {
         // UnaryFunction unary;
         // BinaryFunction binary;
-        int (*unary)(int a);
-        int (*binary)(int a, int b);
+        OperationError (*unary)(int a, int* res);
+        OperationError (*binary)(int a, int b, int* res);
     } func;
     
 } Operator;
 
+char* OP_get_error(OperationError err);
 
-int OP_add(int a, int b);
+OperationError OP_add(int a, int b, int* res);
 
-int OP_div(int a, int b);
+OperationError OP_div(int a, int b, int* res);
 
-int OP_mul(int a, int b);
+OperationError OP_mul(int a, int b, int* res);
 
-int OP_sub(int a, int b);
+OperationError OP_sub(int a, int b, int* res);
 
-int OP_mod(int a, int b);
+OperationError OP_mod(int a, int b, int* res);
 
-int OP_exp(int a, int b);
+OperationError OP_exp(int a, int b, int* res);
 
-int OP_factorial(int a);
+OperationError OP_factorial(int a, int* res);
 
 bool is_operator(char* s, Operator* op);
 

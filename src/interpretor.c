@@ -9,7 +9,6 @@
 TokenStack STACK;
 bool QUIT = false;
 
-void print_stack(void)          { Stack_print(&STACK); }
 void print_stack_head(void)     {
     if (Stack_get_length(&STACK) <= 0) {
         printf("stack empty\n");
@@ -17,6 +16,7 @@ void print_stack_head(void)     {
     }
     printf("%d\n", Stack_get_head_token(&STACK).token.number);
 }
+void print_stack(void)          { Stack_print(&STACK); }
 void clear_stack(void)          { Stack_clear(&STACK); }
 void reverse_stack_head(void)   { Stack_swap_head_token(&STACK); }
 void quit(void)                 { QUIT = true; }
@@ -45,6 +45,7 @@ void interpretor(void) {
     char* line = NULL;
     Stack_init(&STACK);
     ParserError err = PARSE_ERR_NONE;
+    OperationError operr = OP_ERR_NONE;
 
     while (!QUIT && (line = readline(">>> "))) {
         add_history(line);
@@ -52,11 +53,11 @@ void interpretor(void) {
             continue;
         }
         
-        if ((err = Parser_tokenize(&STACK, line)) < 0) {
-            printf("\x1b[31m%s\x1b[0m\n", PARSE_ERROR_MSG[-err]);
+        if ((err = Parser_tokenize(&STACK, line, &operr)) < 0) {
+            char* msg = err == PARSE_ERR_OPERATION ? OP_get_error(operr) : Parser_get_error(err);
+            printf("\x1b[31m%s\x1b[0m\n", msg);
         }
         free(line);
     }
-
     free(line);
 }
