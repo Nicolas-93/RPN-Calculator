@@ -78,6 +78,6 @@ void Stack_print(const TokenStack* stack);
  * @param self 
  * @return size_t 
  */
-size_t Vector_get_length(const Vector* self);
+size_t Stack_get_length(const TokenStack* self);
 
 #endif

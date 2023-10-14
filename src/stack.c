@@ -66,3 +66,7 @@ void Stack_print(const TokenStack* stack) {
 
     putchar('\n');
 }
+
+size_t Stack_get_length(const TokenStack* self) {
+    return Vector_get_length(&self->vec);
+}

@@ -11,33 +11,43 @@ char* PARSE_ERROR_MSG[] = {
 };
 
 ParserError Parser_evaluate(TokenStack* stack) {
+
+    assert(Stack_get_length(stack) > 0);
+
     Token t1 = Stack_pop_head_token(stack);
 
-    if (t1.type == OPERATOR) {
-        int res = 0;
+    if (t1.type == NUMBER) {
+        return PARSE_ERR_NO_OPERATOR;
+    }
 
-        if (Vector_get_length(&stack->vec) < 2) {
+    else if (t1.type == STRING) {
+        return PARSE_ERR_UNRECOGNIZED_TOKEN;
+    }
+
+    if (t1.type == OPERATOR) {
+
+        Operator op = t1.token.op;
+
+        if (Stack_get_length(stack) < op.type) {
+            // Stack_clear(stack);
             return PARSE_ERR_MISSING_NUMBER;
         }
 
+        int res = 0;
+
         Token t2 = Stack_pop_head_token(stack);
 
-        if (t1.token.op.type == UNARY_OPERATOR) {
-            res = t1.token.op.func.unary(t2.token.number);
+        if (op.type == UNARY_OPERATOR) {
+            res = op.func.unary(t2.token.number);
         }
 
-        else if (t1.token.op.type == BINARY_OPERATOR) {
-            assert(Vector_get_length(&stack->vec) >= 1);
+        else if (op.type == BINARY_OPERATOR) {
             Token t3 = Stack_pop_head_token(stack);
 
-            res = t1.token.op.func.binary(
+            res = op.func.binary(
                 t3.token.number,
                 t2.token.number
             );
-        }
-
-        else {
-            assert(false && "Can't be here");
         }
 
         Stack_push_token(
@@ -49,12 +59,8 @@ ParserError Parser_evaluate(TokenStack* stack) {
         );
     }
 
-    else if (t1.type == STRING) {
-        return PARSE_ERR_UNRECOGNIZED_TOKEN;
-    }
-
-    else if (t1.type == NUMBER) {
-        return PARSE_ERR_NO_OPERATOR;
+    else {
+        assert(false && "Can be everything but not a Token...");
     }
 
     return PARSE_ERR_NONE;
