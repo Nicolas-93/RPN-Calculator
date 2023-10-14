@@ -54,22 +54,13 @@ VectorError Vector_init(
 VectorError Vector_append(Vector* self, void* elem);
 
 /**
- * @brief Get element at index i
- * 
+ * @brief Get element at index i if positive,
+ * len - i, if negative
  * @param self Vector object
  * @param i index
  * @return void* 
  */
-void* Vector_get(const Vector* self, size_t i);
-
-/**
- * @brief Get element at index len - i
- * 
- * @param self Vector object
- * @param i index len - i
- * @return void* 
- */
-void* Vector_get_reverse(const Vector* self, size_t i);
+void* Vector_get(const Vector* self, int64_t i);
 
 /**
  * @brief Vector pop last element
@@ -77,6 +68,24 @@ void* Vector_get_reverse(const Vector* self, size_t i);
  * @param self Vector object
  */
 void* Vector_pop(Vector* self);
+
+/**
+ * @brief Resize vector
+ * old_size <= new_size : Nothing
+ * old_size > new_size : Removes elements to fit
+ * 
+ * @param self 
+ * @param new_size new size
+ */
+void Vector_resize(Vector* self, size_t new_size);
+
+/**
+ * @brief Reduce memory usage by reducing capacity
+ * to vector's length
+ * 
+ * @param self 
+ */
+VectorError Vector_shrink_to_fit(Vector* self);
 
 /**
  * @brief Free Vector object

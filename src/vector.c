@@ -51,20 +51,15 @@ VectorError Vector_append(Vector* self, void* elem) {
     return VECTOR_ERR_NONE;
 }
 
-void* Vector_get(const Vector* self, size_t i) {
+void* Vector_get(const Vector* self, int64_t i) {
+
+    if (i < 0)
+        i = self->len + i;
 
     if (i >= self->len)
         return NULL;
 
     return self->arr + i * self->element_size;
-}
-
-void* Vector_get_reverse(const Vector* self, size_t i) {
-
-    if (i <= 0 || self->len - i >= self->len)
-        return NULL;
-
-    return self->arr + (self->len - i) * self->element_size;
 }
 
 void* Vector_pop(Vector* self) {
@@ -74,6 +69,15 @@ void* Vector_pop(Vector* self) {
     uint8_t* popped = self->arr + (--(self->len)) * self->element_size;
 
     return popped;
+}
+
+void Vector_resize(Vector* self, size_t new_size) {
+    assert(new_size >= 0);
+    self->len = new_size;
+}
+
+VectorError Vector_shrink_to_fit(Vector* self) {
+    return _Vector_realloc(self, self->len);
 }
 
 void Vector_free(Vector* self) {

@@ -17,7 +17,7 @@ int Stack_push_token(TokenStack* stack, Token token) {
 }
 
 Token Stack_get_head_token(const TokenStack* stack) {
-    Token t = * (Token*) Vector_get_reverse(&stack->vec, 1);
+    Token t = * (Token*) Vector_get(&stack->vec, -1);
     return t;
 }
 
@@ -29,8 +29,8 @@ Token Stack_pop_head_token(TokenStack* stack) {
 int Stack_swap_head_token(TokenStack* stack) {
     assert(Vector_get_length(&stack->vec) >= 2);
 
-    Token* entry1 = Vector_get_reverse(&stack->vec, 1);
-    Token* entry2 = Vector_get_reverse(&stack->vec, 2);
+    Token* entry1 = Vector_get(&stack->vec, -1);
+    Token* entry2 = Vector_get(&stack->vec, -2);
 
     Token tmp = *entry2;
     *entry2 = *entry1;
