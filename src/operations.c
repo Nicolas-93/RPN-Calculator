@@ -51,6 +51,9 @@ OperationError OP_div(int a, int b, int* res) {
     if (b == 0) {
         return OP_ERR_DIV_ZERO;
     }
+    if (a == INT_MIN && b == -1) {
+        return OP_ERR_OVERFLOW;
+    }
     *res = a / b;
     return OP_ERR_NONE;
 }
@@ -80,6 +83,9 @@ OperationError OP_sub(int a, int b, int* res) {
 OperationError OP_mod(int a, int b, int* res) {
     if (b == 0) {
         return OP_ERR_DIV_ZERO;
+    }
+    if (a == INT_MIN && b == -1) {
+        return OP_ERR_OVERFLOW;
     }
     *res = a % b;
     return OP_ERR_NONE;
