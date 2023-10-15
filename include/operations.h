@@ -18,9 +18,10 @@ typedef enum BinaryOperator {
 } OperatorName;
 
 typedef enum OperationError {
-    OP_ERR_NONE = 0,
-    OP_ERR_DIV_ZERO = -1,
-    OP_ERR_FACT_NEGATIVE = -2,
+    OP_ERR_NONE             =  0,
+    OP_ERR_DIV_ZERO         = -1,
+    OP_ERR_FACT_NEGATIVE    = -2,
+    OP_ERR_OVERFLOW         = -3,
 } OperationError;
 
 extern char* OP_ERR_MSG[];
@@ -33,10 +34,10 @@ typedef struct Operator {
     OperatorName name;
     char* symbol;
     union {
-        // UnaryFunction unary;
-        // BinaryFunction binary;
-        OperationError (*unary)(int a, int* res);
-        OperationError (*binary)(int a, int b, int* res);
+        UnaryFunction unary;
+        BinaryFunction binary;
+        // OperationError (*unary)(int a, int* res);
+        // OperationError (*binary)(int a, int b, int* res);
     } func;
     
 } Operator;

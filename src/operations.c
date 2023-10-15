@@ -1,7 +1,9 @@
 #include "operations.h"
 #include "utils.h"
 #include <string.h>
-#include <tgmath.h>
+#include <math.h>
+#include <limits.h>
+#include <errno.h>
 
 Operator OPERATORS[] = {
     {UNARY_OPERATOR , FACTORIAL, "!", .func.unary  = OP_factorial},
@@ -17,6 +19,7 @@ char* OP_ERR_MSG[] = {
     "",
     "Division par 0",
     "Factorielle négative",
+    "Dépassement d'entiers (Overflow)"
 };
 
 bool is_operator(char* s, Operator* op) {
@@ -34,7 +37,13 @@ char* OP_get_error(OperationError err) {
 }
 
 OperationError OP_add(int a, int b, int* res) {
-    *res = a + b;
+    #if __has_builtin(__builtin_add_overflow)
+        if (__builtin_add_overflow(a, b, res)) {
+            return OP_ERR_OVERFLOW;
+        }
+    #else
+        *res = a + b;
+    #endif
     return OP_ERR_NONE;
 }
 
@@ -47,12 +56,24 @@ OperationError OP_div(int a, int b, int* res) {
 }
 
 OperationError OP_mul(int a, int b, int* res) {
-    *res = a * b;
+    #if __has_builtin(__builtin_mul_overflow)
+        if (__builtin_mul_overflow(a, b, res)) {
+            return OP_ERR_OVERFLOW;
+        }
+    #else
+        *res = a * b;
+    #endif
     return OP_ERR_NONE;
 }
 
 OperationError OP_sub(int a, int b, int* res) {
-    *res = a - b;
+    #if __has_builtin(__builtin_mul_overflow)
+        if (__builtin_sub_overflow(a, b, res)) {
+            return OP_ERR_OVERFLOW;
+        }
+    #else
+        *res = a - b;
+    #endif
     return OP_ERR_NONE;
 }
 
@@ -65,7 +86,12 @@ OperationError OP_mod(int a, int b, int* res) {
 }
 
 OperationError OP_exp(int a, int b, int* res) {
-    *res = pow(a, b);
+    long dres = powl(a, b);
+    if (errno == ERANGE || dres >= INT_MAX) {
+        errno = 0;
+        return OP_ERR_OVERFLOW;
+    }
+    *res = (int) dres;
     return OP_ERR_NONE;
 }
 
@@ -77,7 +103,13 @@ OperationError OP_factorial(int a, int* res) {
     *res = 1;
 
     for (; a; --a) {
-        *res *= a;
+        #if __has_builtin(__builtin_mul_overflow)
+            if (__builtin_mul_overflow(*res, a, res)) {
+                return OP_ERR_OVERFLOW;
+            }
+        #else
+            *res *= a;
+        #endif
     }
 
     return OP_ERR_NONE;

@@ -1,4 +1,4 @@
-CC=gcc
+CC=clang
 BUILD_DIR=build
 SRC_DIR=src
 INC_DIR=include
@@ -53,8 +53,8 @@ format: $(SOURCES) $(HEADERS)
 clean:
 	rm -f $(OBJS)
 
-distclean: clean
-	rm -f $(BUILD_DIR)/$(EXEC)
+distclean:
+	rm -rf $(BUILD_DIR)
 	rm -f $(NOM_ZIP)
 
 zip:
