@@ -46,6 +46,7 @@ void interpretor(void) {
     Stack_init(&STACK);
     ParserError err = PARSE_ERR_NONE;
     OperationError operr = OP_ERR_NONE;
+    TokenError tokenerr = TOKEN_ERR_NONE;
 
     while (!QUIT && (line = readline(">>> "))) {
         add_history(line);
@@ -53,8 +54,13 @@ void interpretor(void) {
             continue;
         }
         
-        if ((err = Parser_tokenize(&STACK, line, &operr)) < 0) {
-            char* msg = err == PARSE_ERR_OPERATION ? OP_get_error(operr) : Parser_get_error(err);
+        if ((err = Parser_tokenize(&STACK, line, &operr, &tokenerr)) < 0) {
+            char* msg;
+            switch (err) {
+            case PARSE_ERR_OPERATION:   msg = OP_get_error(operr)       ; break;
+            case PARSE_ERR_TOKEN:       msg = Token_get_error(tokenerr) ; break;
+            default:                    msg = Parser_get_error(err)     ; break;
+            }
             printf("\x1b[31m%s\x1b[0m\n", msg);
         }
         free(line);

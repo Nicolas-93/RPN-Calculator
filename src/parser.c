@@ -76,7 +76,7 @@ ParserError Parser_evaluate(TokenStack* stack, OperationError* operr) {
     return PARSE_ERR_NONE;
 }
 
-ParserError Parser_tokenize(TokenStack* dest, char* user, OperationError* operr) {
+ParserError Parser_tokenize(TokenStack* dest, char* user, OperationError* operr, TokenError* tokerr) {
     char* token_str;
     char* strtok_save_pointer;
     ParserError err = PARSE_ERR_NONE;
@@ -84,7 +84,9 @@ ParserError Parser_tokenize(TokenStack* dest, char* user, OperationError* operr)
     FOREACH_TOKEN_SAFE(token_str, user, &strtok_save_pointer) {
 
         Token token;
-        Token_parse(token_str, &token);
+        if ((*tokerr = Token_parse(token_str, &token)) < 0) {
+            return PARSE_ERR_TOKEN;
+        }
         Stack_push_token(dest, token);
         Stack_print(dest);
 

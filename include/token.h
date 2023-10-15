@@ -6,8 +6,9 @@
 #include <string.h>
 
 typedef enum TokenError {
-    TOKEN_ERR_NONE,
-    TOKEN_ERR_INVALID
+    TOKEN_ERR_NONE              =  0,
+    TOKEN_ERR_INVALID           = -1,
+    TOKEN_ERR_TOO_BIG_NUMBER    = -2,
 } TokenError;
 
 typedef enum TokenType {
@@ -25,11 +26,21 @@ typedef struct Token {
     } token;
 } Token;
 
+extern char* TOKEN_ERR_MSG[];
+
 #define SEPARATORS " \n"
 #define FOREACH_TOKEN_SAFE(token, line, saveptr) \
     for(token = strtok_r((line), SEPARATORS, (saveptr)); \
         token;                                           \
         token = strtok_r((NULL), SEPARATORS, (saveptr)))
+
+/**
+ * @brief Get error message
+ * 
+ * @param err 
+ * @return char* 
+ */
+char* Token_get_error(TokenError err);
 
 /**
  * @brief Parse a string to a new Token object
