@@ -18,7 +18,7 @@ void print_stack_head(void)     {
 }
 void print_stack(void)          { Stack_print(&STACK); }
 void clear_stack(void)          { Stack_clear(&STACK); }
-void reverse_stack_head(void)   { Stack_swap_head_token(&STACK); }
+void reverse_stack_head(void)   { if (Stack_get_length(&STACK) >= 2) Stack_swap_head_token(&STACK); }
 void quit(void)                 { QUIT = true; }
 
 Action FUNCTS[] = {

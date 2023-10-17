@@ -23,55 +23,58 @@ ParserError Parser_evaluate(TokenStack* stack, OperationError* operr) {
     if (t1.type == NUMBER) {
         return PARSE_ERR_NO_OPERATOR;
     }
-
-    else if (t1.type == STRING) {
+    if (t1.type == STRING) {
         return PARSE_ERR_UNRECOGNIZED_TOKEN;
     }
-
-    if (t1.type == OPERATOR) {
-
-        Operator op = t1.token.op;
-
-        if (Stack_get_length(stack) < op.type) {
-            // Stack_clear(stack);
-            return PARSE_ERR_MISSING_NUMBER;
-        }
-
-        *operr = OP_ERR_NONE;
-        int res = 0;
-
-        Token t2 = Stack_pop_head_token(stack);
-
-        if (op.type == UNARY_OPERATOR) {
-            *operr = op.func.unary(t2.token.number, &res);
-        }
-
-        else if (op.type == BINARY_OPERATOR) {
-            Token t3 = Stack_pop_head_token(stack);
-
-            *operr = op.func.binary(
-                t3.token.number,
-                t2.token.number,
-                &res
-            );
-        }
-
-        if (*operr < 0) {
-            return PARSE_ERR_OPERATION;
-        }
-
-        Stack_push_token(
-            stack,
-            (Token) {
-                .type = NUMBER,
-                .token.number = res,
-            }
-        );
-    }
-
-    else {
+    if (t1.type != OPERATOR) {
         assert(false && "Can be everything but not a Token...");
     }
+
+    Operator op = t1.token.op;
+
+    if (Stack_get_length(stack) < op.type) {
+        // Stack_clear(stack);
+        return PARSE_ERR_MISSING_NUMBER;
+    }
+
+    *operr = OP_ERR_NONE;
+    int res = 0;
+
+    Token t2 = Stack_pop_head_token(stack);
+
+    if (op.type == UNARY_OPERATOR) {
+        *operr = op.func.unary(t2.token.number, &res);
+
+        if (*operr < 0) {
+            Stack_push_token(stack, t2);
+        }
+    }
+    else if (op.type == BINARY_OPERATOR) {
+        Token t3 = Stack_pop_head_token(stack);
+
+        *operr = op.func.binary(
+            t3.token.number,
+            t2.token.number,
+            &res
+        );
+
+        if (*operr < 0) {
+            Stack_push_token(stack, t3);
+            Stack_push_token(stack, t2);
+        }
+    }
+
+    if (*operr < 0) {
+        return PARSE_ERR_OPERATION;
+    }
+
+    Stack_push_token(
+        stack,
+        (Token) {
+            .type = NUMBER,
+            .token.number = res,
+        }
+    );
 
     return PARSE_ERR_NONE;
 }

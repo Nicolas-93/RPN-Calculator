@@ -25,8 +25,9 @@ ParserError Parser_evaluate(TokenStack* stack, OperationError* operr);
 /**
  * @brief Tokenize and evaluates user input
  * 
- * @param dest 
- * @param user 
+ * @param dest TokenStack object
+ * @param user User's string
+ * @param operr 
  */
 ParserError Parser_tokenize(TokenStack* dest, char* user, OperationError* operr, TokenError* tokerr);
 
