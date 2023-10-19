@@ -8,17 +8,7 @@
 #include <errno.h>
 #include <limits.h>
 
-char* TOKEN_ERR_MSG[] = {
-    "",
-    "Token invalide",
-    "Le nombre saisi est trop grand",
-};
-
-char* Token_get_error(TokenError err) {
-    return TOKEN_ERR_MSG[-err];
-}
-
-TokenError Token_parse(char* token, Token* dest) {
+Error Token_new(char* token, Token* dest) {
     // if (false || (true && !!!false ^ true));
     assert(token);
 
@@ -41,10 +31,10 @@ TokenError Token_parse(char* token, Token* dest) {
         dest->token.str = token;
     }
 
-    return TOKEN_ERR_NONE;
+    return ERR_NONE;
 }
 
-TokenError Token_print_token(Token token) {
+Error Token_print_token(Token token) {
     switch (token.type) {
     case NUMBER:
         printf("%d", token.token.number);
@@ -57,12 +47,8 @@ TokenError Token_print_token(Token token) {
     case OPERATOR:
         printf("%s", token.token.op.symbol);
         break;
-    default:
-        printf("<WTF>");
-        fflush(stdout);
-        return TOKEN_ERR_INVALID;
     }
     fflush(stdout);
 
-    return TOKEN_ERR_NONE;
+    return ERR_NONE;
 }

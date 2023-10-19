@@ -15,12 +15,6 @@ Operator OPERATORS[] = {
     {BINARY_OPERATOR, MOD      , "%", .func.binary = OP_mod},
 };
 
-char* OP_ERR_MSG[] = {
-    "",
-    "Division par 0",
-    "Factorielle négative",
-    "Dépassement d'entiers (Overflow)"
-};
 
 bool is_operator(char* s, Operator* op) {
     for (int i = 0; i < STATIC_LEN(OPERATORS); ++i) {
@@ -32,11 +26,7 @@ bool is_operator(char* s, Operator* op) {
     return false;
 }
 
-char* OP_get_error(OperationError err) {
-    return OP_ERR_MSG[-err];
-}
-
-OperationError OP_add(int a, int b, int* res) {
+Error OP_add(int a, int b, int* res) {
     #if __has_builtin(__builtin_add_overflow)
         if (__builtin_add_overflow(a, b, res)) {
             return OP_ERR_OVERFLOW;
@@ -44,10 +34,10 @@ OperationError OP_add(int a, int b, int* res) {
     #else
         *res = a + b;
     #endif
-    return OP_ERR_NONE;
+    return ERR_NONE;
 }
 
-OperationError OP_div(int a, int b, int* res) {
+Error OP_div(int a, int b, int* res) {
     if (b == 0) {
         return OP_ERR_DIV_ZERO;
     }
@@ -55,10 +45,10 @@ OperationError OP_div(int a, int b, int* res) {
         return OP_ERR_OVERFLOW;
     }
     *res = a / b;
-    return OP_ERR_NONE;
+    return ERR_NONE;
 }
 
-OperationError OP_mul(int a, int b, int* res) {
+Error OP_mul(int a, int b, int* res) {
     #if __has_builtin(__builtin_mul_overflow)
         if (__builtin_mul_overflow(a, b, res)) {
             return OP_ERR_OVERFLOW;
@@ -66,10 +56,10 @@ OperationError OP_mul(int a, int b, int* res) {
     #else
         *res = a * b;
     #endif
-    return OP_ERR_NONE;
+    return ERR_NONE;
 }
 
-OperationError OP_sub(int a, int b, int* res) {
+Error OP_sub(int a, int b, int* res) {
     #if __has_builtin(__builtin_mul_overflow)
         if (__builtin_sub_overflow(a, b, res)) {
             return OP_ERR_OVERFLOW;
@@ -77,10 +67,10 @@ OperationError OP_sub(int a, int b, int* res) {
     #else
         *res = a - b;
     #endif
-    return OP_ERR_NONE;
+    return ERR_NONE;
 }
 
-OperationError OP_mod(int a, int b, int* res) {
+Error OP_mod(int a, int b, int* res) {
     if (b == 0) {
         return OP_ERR_DIV_ZERO;
     }
@@ -88,20 +78,22 @@ OperationError OP_mod(int a, int b, int* res) {
         return OP_ERR_OVERFLOW;
     }
     *res = a % b;
-    return OP_ERR_NONE;
+    if (*res < 0)
+        *res += b;
+    return ERR_NONE;
 }
 
-OperationError OP_exp(int a, int b, int* res) {
+Error OP_exp(int a, int b, int* res) {
     long dres = powl(a, b);
     if (errno == ERANGE || dres >= INT_MAX) {
         errno = 0;
         return OP_ERR_OVERFLOW;
     }
     *res = (int) dres;
-    return OP_ERR_NONE;
+    return ERR_NONE;
 }
 
-OperationError OP_factorial(int a, int* res) {
+Error OP_factorial(int a, int* res) {
     if (a < 0) {
         return OP_ERR_FACT_NEGATIVE;
     }
@@ -118,5 +110,5 @@ OperationError OP_factorial(int a, int* res) {
         #endif
     }
 
-    return OP_ERR_NONE;
+    return ERR_NONE;
 }

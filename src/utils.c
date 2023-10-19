@@ -1,6 +1,6 @@
 #include "utils.h"
-#include "ctype.h"
-#include "stdbool.h"
+#include <ctype.h>
+#include <stdbool.h>
 
 bool is_integer(char* s, bool minus) {
     if (!s) return false;

@@ -5,12 +5,6 @@
 #include "operations.h"
 #include <string.h>
 
-typedef enum TokenError {
-    TOKEN_ERR_NONE              =  0,
-    TOKEN_ERR_INVALID           = -1,
-    TOKEN_ERR_TOO_BIG_NUMBER    = -2,
-} TokenError;
-
 typedef enum TokenType {
     OPERATOR,
     NUMBER,
@@ -35,28 +29,20 @@ extern char* TOKEN_ERR_MSG[];
         token = strtok_r((NULL), SEPARATORS, (saveptr)))
 
 /**
- * @brief Get error message
- * 
- * @param err 
- * @return char* 
- */
-char* Token_get_error(TokenError err);
-
-/**
  * @brief Parse a string to a new Token object
  * 
  * @param token user string
  * @param dest destination to new Token
- * @return TokenError
+ * @return Error
  */
-TokenError Token_parse(char* token, Token* dest);
+Error Token_new(char* token, Token* dest);
 
 /**
  * @brief Print token to stdout
  * 
  * @param token Token object
- * @return TokenError 
+ * @return Error 
  */
-TokenError Token_print_token(Token token);
+Error Token_print_token(Token token);
 
 #endif

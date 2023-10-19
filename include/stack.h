@@ -1,76 +1,76 @@
 #ifndef STACK_H
 #define STACK_H
 
-//#include <sys/queue.h>
-#include "token.h"
 #include "vector.h"
 
-typedef struct TokenStack {
+typedef struct ValueStack {
     Vector vec;
-} TokenStack;
+} ValueStack;
+
+typedef int Value;
 
 /**
  * @brief Initialize a stack
  * 
- * @param new TokenStack object
+ * @param new ValueStack object
  * @return int 
  */
-int Stack_init(TokenStack* new);
+int Stack_init(ValueStack* self);
 
 /**
- * @brief Push a token into the stack
+ * @brief Push a value into the stack
  * 
- * @param stack TokenStack object
- * @param token Token to insert
+ * @param stack ValueStack object
+ * @param value Token to insert
  * @return int 
  */
-int Stack_push_token(TokenStack* stack, Token token);
+int Stack_push_value(ValueStack* self, Value value);
 
 /**
- * @brief Return the stack's token, without removing it
+ * @brief Return the stack's head value, without removing it
  * 
- * @param stack TokenStack object
+ * @param stack ValueStack object
  * @return Token 
  */
-Token Stack_get_head_token(const TokenStack* stack);
+Value Stack_get_head_value(const ValueStack* self);
 
 /**
- * @brief Pop out the stack's token
+ * @brief Pop out the stack's number
  * 
- * @param stack TokenStack object
+ * @param stack ValueStack object
  * @return Token 
  */
-Token Stack_pop_head_token(TokenStack* stack);
+Value Stack_pop_head_value(ValueStack* self);
 
 /**
- * @brief Swaps the top's token of the stack
+ * @brief Swaps the top's values of the stack
  * 
- * @param stack Adresss of TokenStack object
+ * @param stack Adresss of ValueStack object
  * @return int 
  */
-int Stack_swap_head_token(TokenStack* stack);
+int Stack_swap_head_value(ValueStack* self);
 
 /**
  * @brief Clear stack
  * 
- * @param stack Adresss of TokenStack object
+ * @param stack Adresss of ValueStack object
  */
-void Stack_clear(TokenStack* stack);
+void Stack_clear(ValueStack* self);
 
 /**
  * @brief Frees stack
  * 
- * @param stack Adresss of TokenStack object
+ * @param stack Adresss of ValueStack object
  * @return int 
  */
-int Stack_free(TokenStack* stack);
+int Stack_free(ValueStack* self);
 
 /**
  * @brief Print stack_content
  * 
- * @param stack TokenStack object
+ * @param stack ValueStack object
  */
-void Stack_print(const TokenStack* stack);
+void Stack_print(const ValueStack* stack);
 
 /**
  * @brief Get stack's length
@@ -78,6 +78,6 @@ void Stack_print(const TokenStack* stack);
  * @param self 
  * @return size_t 
  */
-size_t Stack_get_length(const TokenStack* self);
+size_t Stack_get_length(const ValueStack* self);
 
 #endif

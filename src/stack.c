@@ -3,70 +3,69 @@
 #include <assert.h>
 #include <stdio.h>
 
-int Stack_init(TokenStack* new) {
-    Vector_init(&new->vec, sizeof(Token), 100, NULL);
+int Stack_init(ValueStack* new) {
+    Vector_init(&new->vec, sizeof(Value), 100, NULL);
 
     return 0;
 }
 
-int Stack_push_token(TokenStack* stack, Token token) {
+int Stack_push_value(ValueStack* self, Value value) {
 
-    Vector_append(&stack->vec, &token);
+    Vector_append(&self->vec, &value);
 
-    return ERR_NONE;
+    return 0;
 }
 
-Token Stack_get_head_token(const TokenStack* stack) {
-    Token t = * (Token*) Vector_get(&stack->vec, -1);
+Value Stack_get_head_value(const ValueStack* self) {
+    Value t = * (Value*) Vector_get(&self->vec, -1);
     return t;
 }
 
-Token Stack_pop_head_token(TokenStack* stack) {
-    Token t = * (Token*) Vector_pop(&stack->vec);
+Value Stack_pop_head_value(ValueStack* self) {
+    Value t = * (Value*) Vector_pop(&self->vec);
     return t;
 }
 
-int Stack_swap_head_token(TokenStack* stack) {
-    assert(Vector_get_length(&stack->vec) >= 2);
+int Stack_swap_head_value(ValueStack* self) {
+    assert(Vector_get_length(&self->vec) >= 2);
 
-    Token* entry1 = Vector_get(&stack->vec, -1);
-    Token* entry2 = Vector_get(&stack->vec, -2);
+    Value* entry1 = Vector_get(&self->vec, -1);
+    Value* entry2 = Vector_get(&self->vec, -2);
 
-    Token tmp = *entry2;
+    Value tmp = *entry2;
     *entry2 = *entry1;
     *entry1 = tmp;
 
-    return ERR_NONE;
+    return 0;
 }
 
-int Stack_free(TokenStack* stack) {
-    Vector_free(&stack->vec);
+int Stack_free(ValueStack* self) {
+    Vector_free(&self->vec);
 
-    return ERR_NONE;
+    return 0;
 }
 
-void Stack_clear(TokenStack* stack) {
-    Vector_clear(&stack->vec);
+void Stack_clear(ValueStack* self) {
+    Vector_clear(&self->vec);
 }
 
-void Stack_print(const TokenStack* stack) {
+void Stack_print(const ValueStack* self) {
 
     // Comment déclarer un pointeur comme tableau avec la syntaxe des VLAs ?
     // De sorte que la tableau soit correctement typé et ainsi facilement itérable,
     // et possède sa taille réelle ? (sizeof(array))
 
-    // Token* tokens = (Token*) stack->vec.arr;
+    // Value* values = (Value*) self->vec.arr;
 
-    VECTOR_DECLARE_ARRAY(stack->vec, Token, tokens);
+    VECTOR_DECLARE_ARRAY(self->vec, Value, values);
 
-    for (int i = 0; i < Vector_get_length(&stack->vec); ++i) {
-        Token_print_token(tokens[i]);
-        putchar(' ');
+    for (int i = 0; i < Vector_get_length(&self->vec); ++i) {
+        printf("%d ", values[i]);
     }
 
     putchar('\n');
 }
 
-size_t Stack_get_length(const TokenStack* self) {
+size_t Stack_get_length(const ValueStack* self) {
     return Vector_get_length(&self->vec);
 }

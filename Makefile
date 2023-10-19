@@ -1,4 +1,4 @@
-CC=clang
+CC=gcc
 BUILD_DIR=build
 SRC_DIR=src
 INC_DIR=include
@@ -25,13 +25,13 @@ $(BUILD_DIR)/$(EXEC): $(OBJS)
 	$(CC) $^ -o $@ $(LIBS)
 
 # Dépendances
-token.o: token.c operations.h
-stack.o: stack.c token.h
-parser.o: parser.c stack.h vector.h
+token.o: token.c operations.h utils.h
+stack.o: stack.c
+evaluator.o: evaluator.c stack.h token.h utils.h
 operations.o: operations.c utils.h
 utils.o: utils.c
 vector.o: vector.c
-interpretor.o: interpretor.c parser.h utils.h
+interpretor.o: interpretor.c evaluator.h token.h coroutine.h stack.h utils.h
 
 # Création des fichiers objets à partir des fichiers sources
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c

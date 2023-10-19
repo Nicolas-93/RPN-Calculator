@@ -1,10 +1,14 @@
-#include "interpretor.h"
 #define _GNU_SOURCE
+#include "interpretor.h"
+#include "stack.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 int main(int argc, char const *argv[]) {
-    interpretor();
-    return 0;
+    ValueStack stack;
+    Stack_init(&stack);
+    Interpretor_consume_input(&stack);
+
+    return EXIT_FAILURE;
 }
