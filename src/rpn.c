@@ -9,6 +9,7 @@ int main(int argc, char const *argv[]) {
     ValueStack stack;
     Stack_init(&stack);
     Interpretor_consume_input(&stack);
+    Stack_free(&stack);
 
-    return EXIT_FAILURE;
+    return EXIT_SUCCESS;
 }

@@ -21,10 +21,13 @@ void print_stack_head(void)     {
     }
     printf("%d\n", Stack_get_head_value(STACK));
 }
-void print_stack(void)          { Stack_print(STACK); }
-void clear_stack(void)          { Stack_clear(STACK); }
-void reverse_stack_head(void)   { if (Stack_get_length(STACK) >= 2) Stack_swap_head_value(STACK); }
-void quit(void)                 { QUIT = true; }
+void print_stack(void)                  { Stack_print(STACK); }
+void clear_stack(void)                  { Stack_clear(STACK); }
+void reverse_stack_head(void)           {
+    if (Stack_get_length(STACK) >= 2)
+        Stack_swap_head_value(STACK); 
+}
+void quit(void)                         { QUIT = true; }
 
 Action FUNCTS[] = {
     {"a", "all"    , print_stack},
