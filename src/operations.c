@@ -6,15 +6,14 @@
 #include <errno.h>
 
 Operator OPERATORS[] = {
-    {UNARY_OPERATOR , FACTORIAL, "!", .func.unary  = OP_factorial},
-    {BINARY_OPERATOR, EXPONENT , "^", .func.binary = OP_exp},
-    {BINARY_OPERATOR, ADD      , "+", .func.binary = OP_add},
-    {BINARY_OPERATOR, SUB      , "-", .func.binary = OP_sub},
-    {BINARY_OPERATOR, DIV      , "*", .func.binary = OP_mul},
-    {BINARY_OPERATOR, DIV      , "/", .func.binary = OP_div},
-    {BINARY_OPERATOR, MOD      , "%", .func.binary = OP_mod},
+    {1, FACTORIAL, "!", OP_factorial},
+    {2, EXPONENT , "^", OP_exp},
+    {2, ADD      , "+", OP_add},
+    {2, SUB      , "-", OP_sub},
+    {2, MUL      , "*", OP_mul},
+    {2, DIV      , "/", OP_div},
+    {2, MOD      , "%", OP_mod},
 };
-
 
 bool is_operator(char* s, Operator* op) {
     for (int i = 0; i < STATIC_LEN(OPERATORS); ++i) {
@@ -26,7 +25,9 @@ bool is_operator(char* s, Operator* op) {
     return false;
 }
 
-Error OP_add(int a, int b, int* res) {
+Error OP_add(int* args, int* res) {
+    int a = args[0], b = args[1];
+
     #if __has_builtin(__builtin_add_overflow)
         if (__builtin_add_overflow(a, b, res)) {
             return OP_ERR_OVERFLOW;
@@ -37,7 +38,8 @@ Error OP_add(int a, int b, int* res) {
     return ERR_NONE;
 }
 
-Error OP_div(int a, int b, int* res) {
+Error OP_div(int* args, int* res) {
+    int a = args[0], b = args[1];
     if (b == 0) {
         return OP_ERR_DIV_ZERO;
     }
@@ -48,7 +50,8 @@ Error OP_div(int a, int b, int* res) {
     return ERR_NONE;
 }
 
-Error OP_mul(int a, int b, int* res) {
+Error OP_mul(int* args, int* res) {
+    int a = args[0], b = args[1];
     #if __has_builtin(__builtin_mul_overflow)
         if (__builtin_mul_overflow(a, b, res)) {
             return OP_ERR_OVERFLOW;
@@ -59,7 +62,8 @@ Error OP_mul(int a, int b, int* res) {
     return ERR_NONE;
 }
 
-Error OP_sub(int a, int b, int* res) {
+Error OP_sub(int* args, int* res) {
+    int a = args[0], b = args[1];
     #if __has_builtin(__builtin_mul_overflow)
         if (__builtin_sub_overflow(a, b, res)) {
             return OP_ERR_OVERFLOW;
@@ -70,7 +74,8 @@ Error OP_sub(int a, int b, int* res) {
     return ERR_NONE;
 }
 
-Error OP_mod(int a, int b, int* res) {
+Error OP_mod(int* args, int* res) {
+    int a = args[0], b = args[1];
     if (b == 0) {
         return OP_ERR_DIV_ZERO;
     }
@@ -83,7 +88,8 @@ Error OP_mod(int a, int b, int* res) {
     return ERR_NONE;
 }
 
-Error OP_exp(int a, int b, int* res) {
+Error OP_exp(int* args, int* res) {
+    int a = args[0], b = args[1];
     long dres = powl(a, b);
     if (errno == ERANGE || dres >= INT_MAX) {
         errno = 0;
@@ -93,7 +99,9 @@ Error OP_exp(int a, int b, int* res) {
     return ERR_NONE;
 }
 
-Error OP_factorial(int a, int* res) {
+Error OP_factorial(int* args, int* res) {
+    int a = args[0];
+
     if (a < 0) {
         return OP_ERR_FACT_NEGATIVE;
     }

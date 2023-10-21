@@ -3,15 +3,12 @@
 
 #include "utils.h"
 #include "errors.h"
-
-typedef enum OperatorArity {
-    UNARY_OPERATOR = 1,
-    BINARY_OPERATOR,
-} OperatorArity;
+#include <stdint.h>
 
 typedef enum BinaryOperator {
     ADD = 1,
     SUB,
+    MUL,
     DIV,
     MOD,
     FACTORIAL,
@@ -20,35 +17,28 @@ typedef enum BinaryOperator {
 
 extern char* OP_ERR_MSG[];
 
-typedef Error (*UnaryFunction)(int, int*);
-typedef Error (*BinaryFunction)(int, int, int*);
+typedef Error (*NAryFunction)(int* args, int* res);
 
 typedef struct Operator {
-    OperatorArity arity;
+    uint32_t arity;
     OperatorName name;
     char* symbol;
-    union {
-        UnaryFunction unary;
-        BinaryFunction binary;
-        // Error (*unary)(int a, int* res);
-        // Error (*binary)(int a, int b, int* res);
-    } func;
-    
+    NAryFunction func;
 } Operator;
 
-Error OP_add(int a, int b, int* res);
+Error OP_add(int* args, int* res);
 
-Error OP_div(int a, int b, int* res);
+Error OP_div(int* args, int* res);
 
-Error OP_mul(int a, int b, int* res);
+Error OP_mul(int* args, int* res);
 
-Error OP_sub(int a, int b, int* res);
+Error OP_sub(int* args, int* res);
 
-Error OP_mod(int a, int b, int* res);
+Error OP_mod(int* args, int* res);
 
-Error OP_exp(int a, int b, int* res);
+Error OP_exp(int* args, int* res);
 
-Error OP_factorial(int a, int* res);
+Error OP_factorial(int* args, int* res);
 
 bool is_operator(char* s, Operator* op);
 

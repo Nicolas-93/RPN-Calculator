@@ -7,7 +7,9 @@
 #include <stdio.h>
 
 Error Eval_evaluate(ValueStack* stack, Operator op) {
-    Error err;
+    Error err = ERR_NONE;
+    Value res = 0;
+    VECTOR_DECLARE_ARRAY(stack->vec, Value, values);
 
     assert(Stack_get_length(stack) > 0);
 
@@ -15,33 +17,13 @@ Error Eval_evaluate(ValueStack* stack, Operator op) {
         return EVAL_ERR_MISSING_NUMBER;
     }
 
-    err = ERR_NONE;
-    Value res = 0;
-
-    Value v2 = Stack_pop_head_value(stack);
-
-    if (op.arity == UNARY_OPERATOR) {
-        err = op.func.unary(v2, &res);
-
-        if (err < 0) {
-            Stack_push_value(stack, v2);
-        }
-    }
-    else if (op.arity == BINARY_OPERATOR) {
-        Value v3 = Stack_pop_head_value(stack);
-
-        err = op.func.binary(v3, v2, &res);
-
-        if (err < 0) {
-            Stack_push_value(stack, v3);
-            Stack_push_value(stack, v2);
-        }
-    }
+    err = op.func(values + Stack_get_length(stack) - op.arity, &res);
 
     if (err < 0) {
         return err;
     }
 
+    Vector_resize(&stack->vec, Stack_get_length(stack) - op.arity);
     Stack_push_value(stack, res);
 
     return ERR_NONE;
