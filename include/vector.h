@@ -54,7 +54,7 @@ VectorError Vector_init(
 VectorError Vector_append(Vector* self, void* elem);
 
 /**
- * @brief Get element at index i if positive,
+ * @brief Get element's address at index i if positive,
  * len - i, if negative
  * @param self Vector object
  * @param i index
