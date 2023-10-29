@@ -16,7 +16,7 @@ Error Token_new(char* token, Token* dest) {
         dest->type = OPERATOR;
     }
 
-    else if (is_integer(token, true)) {
+    else if (is_integer(token, false)) {
         dest->type = NUMBER;
         long long int n = strtoll(token, NULL, 10);
         if (errno == ERANGE || n > INT_MAX || n < INT_MIN) {
