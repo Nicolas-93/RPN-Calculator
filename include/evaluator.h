@@ -2,7 +2,7 @@
 #define PARSER_H
 
 #include "stack.h"
-#include "operations.h"
+#include "operator.h"
 #include "error.h"
 
 /**
@@ -12,6 +12,6 @@
  * @param operator Operator to apply 
  * @return int 
  */
-Error Eval_evaluate(ValueStack* stack, Operator op);
+Error Eval_evaluate(ValueStack* stack, Operator* op);
 
 #endif

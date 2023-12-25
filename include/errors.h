@@ -11,13 +11,12 @@ typedef enum Error {
     CMD_UNRECOGNIZED            = -2,
     EVAL_ERR_MISSING_NUMBER     = -3,
     TOKEN_ERR_TOO_BIG_NUMBER    = -4,
-    OP_ERR_DIV_ZERO             = -5,
-    OP_ERR_FACT_NEGATIVE        = -6,
-    OP_ERR_OVERFLOW             = -7,
+    ERR_PLUGIN_LOAD             = -5,
+    OP_ERROR                    = -6,
 } Error;
 
 char* get_error(Error err);
 
-#define PRINT_ERR(...) do { printf(C_RED"%s"C_END "\n", ##__VA_ARGS__); } while(0)
+#define PRINT_ERR(err) do { printf(C_RED"%s"C_END "\n", err); } while(0)
 
 #endif

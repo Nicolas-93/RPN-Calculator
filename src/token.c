@@ -1,5 +1,5 @@
 #include "token.h"
-#include "operations.h"
+#include "operator.h"
 #include "utils.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -9,14 +9,9 @@
 #include <limits.h>
 
 Error Token_new(char* token, Token* dest) {
-    // if (false || (true && !!!false ^ true));
     assert(token);
 
-    if (is_operator(token, &dest->token.op)) {
-        dest->type = OPERATOR;
-    }
-
-    else if (is_integer(token, false)) {
+    if (is_integer(token, true)) {
         dest->type = NUMBER;
         long long int n = strtoll(token, NULL, 10);
         if (errno == ERANGE || n > INT_MAX || n < INT_MIN) {
@@ -24,6 +19,10 @@ Error Token_new(char* token, Token* dest) {
         }
 
         dest->token.number = atoi(token);
+    }
+
+    else if (Operator_is_op(&dest->token.op, token[0])) {
+        dest->type = OPERATOR;
     }
 
     else {
@@ -45,7 +44,7 @@ Error Token_print_token(Token token) {
         break;
     
     case OPERATOR:
-        printf("%s", token.token.op.symbol);
+        printf("%c", token.token.op->symbol());
         break;
     }
     fflush(stdout);

@@ -3,8 +3,8 @@ BUILD_DIR=build
 SRC_DIR=src
 INC_DIR=include
 INCLUDE=-I$(INC_DIR)
-LIBS=-lm -lreadline
-CFLAGS=-fdiagnostics-color=always -Wall -pedantic -std=c17 -g -O0
+LIBS=-lm -lreadline -ldl
+CFLAGS=-fdiagnostics-color=always -Wall -std=gnu17 -g -O0
 TP_N=3
 NOM_ZIP=TP$(TP_N)_SEBAN_Nicolas.zip
 EXEC=rpn
@@ -16,9 +16,15 @@ HEADERS=$(wildcard $(INC_DIR)/*.h)
 # On récupère tous les fichiers sources .c, et on leurs préfixe
 # le chemin de build, et suffixe en .o :
 OBJS=$(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SOURCES))
-#$(info $(OBJS))
+
+PLUGINS_OPERATORS=$(wildcard $(SRC_DIR)/operators/*.c)
+PLUGINS_OPERATORS_OBJS=$(patsubst $(SRC_DIR)/operators/%.c, $(BUILD_DIR)/plugins/operators/%.so, $(PLUGINS_OPERATORS))
+
+$(info $(PLUGINS_OPERATORS_OBJS))
 
 all: $(BUILD_DIR)/$(EXEC)
+
+plugins: $(PLUGINS_OPERATORS_OBJS)
 
 # Assemblage de l'exécutable final
 $(BUILD_DIR)/$(EXEC): $(OBJS)
@@ -37,6 +43,13 @@ interpretor.o: interpretor.c evaluator.h token.h coroutine.h stack.h utils.h
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir --parents $(BUILD_DIR)
 	$(CC) $(INCLUDE) $(CFLAGS) -c $< -o $@
+
+# Compilation des plugins
+
+$(BUILD_DIR)/plugins/operators/%.so: $(SRC_DIR)/operators/%.c
+	@mkdir --parents $(BUILD_DIR)/plugins/operators
+	$(CC) $(INCLUDE) $(CFLAGS) -fPIC -shared $< -o $@ -lm
+
 
 rapport: rapport.pdf
 

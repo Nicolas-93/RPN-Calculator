@@ -2,7 +2,7 @@
 #define TOKEN_H
 #define _GNU_SOURCE
 
-#include "operations.h"
+#include "operator.h"
 #include <string.h>
 
 typedef enum TokenType {
@@ -14,7 +14,7 @@ typedef enum TokenType {
 typedef struct Token {
     TokenType type;
     union {
-        Operator op;
+        Operator* op;
         int number;
         char* str;
     } token;

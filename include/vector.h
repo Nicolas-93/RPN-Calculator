@@ -1,3 +1,6 @@
+#ifndef VECTOR_H
+#define VECTOR_H
+
 #include <stdlib.h>
 #include <stdint.h>
 
@@ -124,3 +127,5 @@ void Vector_sort(Vector* self);
  * @return void* 
  */
 void* Vector_search(Vector* self, void* searched_value);
+
+#endif

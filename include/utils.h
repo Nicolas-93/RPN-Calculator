@@ -6,6 +6,8 @@
 
 #define STATIC_LEN(arr) (sizeof(arr) / sizeof(arr[0]))
 
+#define BOOL(x) (!!x)
+
 bool is_integer(char* s, bool minus);
 
 #define C_RED "\x1b[31m"
