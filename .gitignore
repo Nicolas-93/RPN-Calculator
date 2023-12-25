@@ -1,10 +1,13 @@
+.gitignore
 .history/
-TP2_SEBAN_Nicolas.zip
+*.zip
 rapport.pdf
 build/
 logos/
 tmp/
 .vscode
+ghidra/
+*.pdf
 
 # Prerequisites
 *.d
