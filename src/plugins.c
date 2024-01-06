@@ -17,12 +17,8 @@
         } \
     } while (0)
 
-#define _Plugin_safe_load_sym(handle, sym_name, dest) \
-    ({ \
-        *(void**) dest = dlsym(handle, sym_name); \
-        RETURN_IF_DLERROR("dlsym"); \
-        !BOOL(*dest); \
-    })
+#define _Plugin_load_sym(handle, sym_name, dest, mandatory) \
+    (*(void**) dest = dlsym(handle, sym_name), mandatory && !BOOL(*dest) )
 
 
 static Plugins PLUGINS = {0};
@@ -61,13 +57,13 @@ static Error _Plugin_load_operators(void) {
         handle = dlopen(buffer, RTLD_NOW);
         RETURN_IF_DLERROR("dlopen");
 
-        if (_Plugin_safe_load_sym(handle, "symbol", &op.symbol)         ||
-            _Plugin_safe_load_sym(handle, "arity", &op.arity)           ||
-            _Plugin_safe_load_sym(handle, "check", &op.check)           ||
-            _Plugin_safe_load_sym(handle, "get_error", &op.get_error)   ||
-            _Plugin_safe_load_sym(handle, "eval", &op.eval)) {
+        if (_Plugin_load_sym(handle, "symbol",      &op.symbol,     true)   ||
+            _Plugin_load_sym(handle, "arity",       &op.arity,      true)   ||
+            _Plugin_load_sym(handle, "check",       &op.check,      true)   ||
+            _Plugin_load_sym(handle, "get_error",   &op.get_error,  false)  ||
+            _Plugin_load_sym(handle, "eval",        &op.eval,       true)) {
             printf("Failed to load plugin %s\n", buffer);
-            return ERR_PLUGIN_LOAD;
+            RETURN_IF_DLERROR("dlsym");
         }
 
         Vector_append(&PLUGINS.operators, &op);
