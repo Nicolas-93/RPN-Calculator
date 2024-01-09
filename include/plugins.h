@@ -9,7 +9,7 @@ typedef struct Plugins {
     Vector operators;
 } Plugins;
 
-Error Plugins_load(void);
+Error Plugins_load(char* exec);
 
 void Plugins_get(void);
 

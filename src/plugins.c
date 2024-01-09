@@ -7,21 +7,21 @@
 #include "errors.h"
 #include "plugins.h"
 #include "utils.h"
+#include <unistd.h>
 
-#define RETURN_IF_DLERROR(func) \
-    do { \
-        char* err = dlerror(); \
-        if (err) { \
-            fprintf(stderr, func ": %s\n", err); \
-            return ERR_PLUGIN_LOAD; \
-        } \
-    } while (0)
+static Plugins PLUGINS = {0};
+
+static Error print_dlerr(char* func) {
+    char* err = dlerror();
+    if (err) {
+        fprintf(stderr, "%s: %s\n", func, err);
+        return ERR_PLUGIN_LOAD;
+    }
+    return ERR_NONE;
+}
 
 #define _Plugin_load_sym(handle, sym_name, dest, mandatory) \
     (*(void**) dest = dlsym(handle, sym_name), mandatory && !BOOL(*dest) )
-
-
-static Plugins PLUGINS = {0};
 
 const Vector* Plugins_get_operators(void) {
     return &PLUGINS.operators;
@@ -36,8 +36,20 @@ static int Plugin_dirent_filter(const struct dirent* entry) {
     return 0;
 }
 
-static Error _Plugin_load_operators(void) {
+static void change_dir(char* cmd_exec) {
+    char* c = NULL;
+    if ((c = strrchr(cmd_exec, '/'))) {
+        *c = '\0';
+    }
+    else {
+        return;
+    }
+    chdir(cmd_exec);
+}
+
+static Error _Plugin_load_operators(char* exec) {
     struct dirent** found;
+    change_dir(exec);
     int found_len = scandir("./plugins/operators", &found, Plugin_dirent_filter, alphasort);
 
     if (found_len < 0) {
@@ -49,21 +61,25 @@ static Error _Plugin_load_operators(void) {
     char buffer[512];
 
     for (int i = 0; i < found_len; i++) {
-        Operator op;
+        Operator op = {0};
 
-        void* handle;
+        void* handle = NULL;
         snprintf(buffer, 512, "./plugins/operators/%s", found[i]->d_name);
         printf("Loading plugin %s\n", buffer);
         handle = dlopen(buffer, RTLD_NOW);
-        RETURN_IF_DLERROR("dlopen");
+        
+        if (print_dlerr("dlopen") == ERR_PLUGIN_LOAD) {
+            continue;
+        }
 
         if (_Plugin_load_sym(handle, "symbol",      &op.symbol,     true)   ||
             _Plugin_load_sym(handle, "arity",       &op.arity,      true)   ||
             _Plugin_load_sym(handle, "check",       &op.check,      true)   ||
             _Plugin_load_sym(handle, "get_error",   &op.get_error,  false)  ||
             _Plugin_load_sym(handle, "eval",        &op.eval,       true)) {
-            printf("Failed to load plugin %s\n", buffer);
-            RETURN_IF_DLERROR("dlsym");
+            fprintf(stderr, "Failed to load plugin %s\n", buffer);
+            print_dlerr("dlsym");
+            continue;
         }
 
         Vector_append(&PLUGINS.operators, &op);
@@ -74,6 +90,6 @@ static Error _Plugin_load_operators(void) {
     return ERR_NONE;
 }
 
-Error Plugins_load(void) {
-    return _Plugin_load_operators();
+Error Plugins_load(char* exec) {
+    return _Plugin_load_operators(exec);
 }

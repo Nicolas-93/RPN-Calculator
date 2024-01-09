@@ -6,9 +6,9 @@
 #include <string.h>
 #include "plugins.h"
 
-int main(int argc, char const *argv[]) {
+int main(int argc, char *argv[]) {
     ValueStack stack;
-    Plugins_load();
+    Plugins_load(argv[0]);
     Stack_init(&stack);
     Interpretor_consume_input(&stack);
     Stack_free(&stack);
