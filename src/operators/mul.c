@@ -26,7 +26,7 @@ int check(const int args[2]) {
         }
     #endif
 
-    return OP_ERR_OVERFLOW;
+    return OP_ERR_NONE;
 }
 
 const char* get_error(int err) {

@@ -5,7 +5,7 @@ int eval(const int args[]);
 
 int check(const int args[]);
 
-const char* get_error(int err);
+__attribute__ ((const)) const char* get_error(int err);
 
 __attribute__ ((const)) const int arity(void);
 
