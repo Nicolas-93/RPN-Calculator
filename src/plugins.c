@@ -11,6 +11,12 @@
 
 static Plugins PLUGINS = {0};
 
+/**
+ * @brief Print dlerror if any
+ * 
+ * @param func Called function name
+ * @return Error 
+ */
 static Error print_dlerr(char* func) {
     char* err = dlerror();
     if (err) {
@@ -20,6 +26,16 @@ static Error print_dlerr(char* func) {
     return ERR_NONE;
 }
 
+/**
+ * @brief Load plugin
+ * 
+ * @param handle dlsym handle
+ * @param sym_name function to load from handle
+ * @param dest Address to store function's pointer
+ * @param mandatory If true, macro's value is false
+ * if the function couldn't be load
+ * 
+ */
 #define _Plugin_load_sym(handle, sym_name, dest, mandatory) \
     (*(void**) dest = dlsym(handle, sym_name), mandatory && !BOOL(*dest) )
 
@@ -36,6 +52,11 @@ static int Plugin_dirent_filter(const struct dirent* entry) {
     return 0;
 }
 
+/**
+ * @brief Change directory to exec's directory
+ * 
+ * @param cmd_exec 
+ */
 static void change_dir(char* cmd_exec) {
     char* c = NULL;
     if ((c = strrchr(cmd_exec, '/'))) {
@@ -47,6 +68,12 @@ static void change_dir(char* cmd_exec) {
     chdir(cmd_exec);
 }
 
+/**
+ * @brief Load operators
+ * 
+ * @param exec argv[0]
+ * @return Error 
+ */
 static Error _Plugin_load_operators(char* exec) {
     struct dirent** found;
     change_dir(exec);
