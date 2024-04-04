@@ -20,9 +20,9 @@ OBJS=$(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SOURCES))
 PLUGINS_OPERATORS=$(wildcard $(SRC_DIR)/operators/*.c)
 PLUGINS_OPERATORS_OBJS=$(patsubst $(SRC_DIR)/operators/%.c, $(BUILD_DIR)/plugins/operators/%.so, $(PLUGINS_OPERATORS))
 
-$(info $(PLUGINS_OPERATORS_OBJS))
+# $(info $(PLUGINS_OPERATORS_OBJS))
 
-all: $(BUILD_DIR)/$(EXEC)
+all: $(BUILD_DIR)/$(EXEC) plugins
 
 plugins: $(PLUGINS_OPERATORS_OBJS)
 

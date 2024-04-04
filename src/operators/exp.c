@@ -10,7 +10,7 @@ typedef enum OPErr {
 
 static const char* ERRORS[] = {
     [-OP_ERR_NONE]       = (void*) 0,
-    [-OP_ERR_OVERFLOW]   = "Dépassement d'entiers (Overflow)",
+    [-OP_ERR_OVERFLOW]   = "Integer overflow",
 };
 
 static int LAST_RESULT = -1;
