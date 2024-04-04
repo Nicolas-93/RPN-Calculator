@@ -1,6 +1,6 @@
-# NPN Calculator
+# RPN Calculator
 
-This is a simple calculator that uses the NPN (Reverse Polish Notation) method to calculate the result of an expression.
+This is a simple calculator that uses the RPN (Reverse Polish Notation) method to calculate the result of an expression.
 
 ## Buiding the project
 
